@@ -1,0 +1,3 @@
+Compile the .cpp file in Dev-C++ (F11) and run it. Save a screenshot of the Command Prompt / console output as Output_Screenshot.png.
+
+This text file is a reminder; it is not a screenshot.

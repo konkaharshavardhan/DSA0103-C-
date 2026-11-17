@@ -1,0 +1,11 @@
+#include <iostream>
+#include <string>
+using namespace std;
+class Vehicle { protected:string regNo;double dailyRate;bool rented; public:Vehicle(const string& r,double d):regNo(r),dailyRate(d),rented(false){}virtual double charge(int days)const=0;virtual string type()const=0;void rent(){if(!rented){rented=true;cout<<regNo<<" rented\n";}else cout<<regNo<<" already rented\n";}void returnVehicle(int late){if(rented){cout<<regNo<<" returned. Late fee: Rs "<<late*100<<'\n';rented=false;}else cout<<regNo<<" was not rented\n";}void show(int days)const{cout<<type()<<" "<<regNo<<" | Charge for "<<days<<" day(s): Rs "<<charge(days)<<'\n';}virtual ~Vehicle(){}};
+class Bicycle:public Vehicle{public:Bicycle(const string&r,double d):Vehicle(r,d){}double charge(int n)const{return dailyRate*n;}string type()const{return "Bicycle";}};
+class MotorVehicle:public Vehicle{protected:double fuelLevel;string serviceDue;public:MotorVehicle(const string&r,double d,double f,const string&s):Vehicle(r,d),fuelLevel(f),serviceDue(s){}};
+class TwoWheeler:public MotorVehicle{public:TwoWheeler(const string&r,double d,double f,const string&s):MotorVehicle(r,d,f,s){}double charge(int n)const{return dailyRate*n;}string type()const{return "TwoWheeler";}};
+class Car:public MotorVehicle{protected:int seats;public:Car(const string&r,double d,double f,const string&s,int c):MotorVehicle(r,d,f,s),seats(c){}double charge(int n)const{return dailyRate*n;}string type()const{return "Car";}};
+class ElectricCar:public Car{double battery;public:ElectricCar(const string&r,double d,double b,const string&s,int c):Car(r,d,0,s,c),battery(b){}double charge(int n)const{return dailyRate*n+battery*2;}string type()const{return "ElectricCar";}};
+class ElectricBus:public Vehicle{int capacity;public:ElectricBus(const string&r,double d,int c):Vehicle(r,d),capacity(c){}double charge(int n)const{return dailyRate*n+capacity*5;}string type()const{return "ElectricBus";}};
+int main(){Bicycle b("BI-101",100);TwoWheeler t("TW-202",250,8,"2026-12-01");Car c("CA-303",1200,30,"2026-12-10",5);ElectricCar e("EV-404",1500,60,"2026-12-15",5);ElectricBus bus("EB-505",3000,40);Vehicle* fleet[5]={&b,&t,&c,&e,&bus};cout<<"VEHICLE RENTAL FLEET\n";for(int i=0;i<5;++i){fleet[i]->show(2);fleet[i]->rent();}cout<<"\nRETURNS\n";for(int i=0;i<5;++i)fleet[i]->returnVehicle(1);}
